@@ -1,0 +1,39 @@
+# EXAMPLE / DEMO VENUE — these zone polygons are illustrative only.
+# They are NOT a real venue calibration and do not correspond to any
+# actual physical space. They exist to validate zone assignment logic
+# (point-in-polygon, boundary/overlap behavior) against the bundled
+# sample_data/test_video.mp4, which is 768x432 pixels.
+#
+# Coordinate convention: image pixel coordinates, origin (0,0) at the
+# frame's top-left, x increases rightward, y increases downward — see
+# config/schema.py::ZoneConfig for details.
+#
+# K1 zone-graph fields (capacity/preferred_utilization_threshold/
+# neighbors) are engineering assumptions for the demo, not a real
+# venue's measured capacity/adjacency.
+name: "example_venue"
+zones:
+  - id: "entrance"
+    name: "Entrance"
+    polygon: [[0, 0], [220, 0], [220, 432], [0, 432]]
+    area_m2: 30.0
+    enabled: true
+    capacity: 60
+    preferred_utilization_threshold: 0.85
+    neighbors: ["main_area"]
+  - id: "main_area"
+    name: "Main Area"
+    polygon: [[220, 0], [548, 0], [548, 432], [220, 432]]
+    area_m2: 60.0
+    enabled: true
+    capacity: 120
+    preferred_utilization_threshold: 0.85
+    neighbors: ["entrance", "exit"]
+  - id: "exit"
+    name: "Exit"
+    polygon: [[548, 0], [768, 0], [768, 432], [548, 432]]
+    area_m2: 30.0
+    enabled: true
+    capacity: 60
+    preferred_utilization_threshold: 0.85
+    neighbors: ["main_area"]

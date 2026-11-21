@@ -1,0 +1,19 @@
+{
+  "c1_detector_plus_tracker": {
+    "model": "yolov8n.pt",
+    "device": "cpu",
+    "image_size": 640,
+    "source_fps": 12.0,
+    "target_fps": 12.0,
+    "effective_target_fps": 12.0,
+    "processed_frames": 100,
+    "cold_start_s": 0.027,
+    "avg_inference_latency_ms": 0.0,
+    "avg_end_to_end_latency_ms": 68.5,
+    "measured_fps": 14.6,
+    "avg_people_detected": 0.56
+  },
+  "e1_detector_plus_tracker_plus_metrics_avg_ms": 64.39,
+  "e1_additional_overhead_ms": -4.11,
+  "processed_frames": 100
+}

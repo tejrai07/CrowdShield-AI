@@ -1,0 +1,3458 @@
+{
+  "definitions": "Old-vs-new risk-model evaluation for the post-L1 reliability fix. Same metrics, same frozen splits for both generations.\n\n  python scripts/evaluate_reliability.py [--output models/artifacts/reliability_report.json]\n\nMetric definitions (all computed here, from labels - nothing assumed):\n  dangerous_recall   = |true in {HIGH,CRITICAL} and pred in {HIGH,CRITICAL}| / |true in {HIGH,CRITICAL}|\n  false_safe_rate    = |true in {HIGH,CRITICAL} and pred in {SAFE,LOW}|      / |true in {HIGH,CRITICAL}|   (missed danger)\n  false_alarm_rate   = |true in {SAFE,LOW}      and pred in {HIGH,CRITICAL}| / |true in {SAFE,LOW}|        (needless alarm)\n  escalation_recall  = of rows NOT dangerous now that truly ARE dangerous at the horizon, the share predicted dangerous at that horizon\nEvaluation sets: V2-TEST (the held-out test sequences of data/scenarios_v2.yaml - never seen by the new models; the old models were\ntrained on different data) and LEGACY-TEST (original I1/H1 test sequences; verified to share no feature vector with v2 train).\nSynthetic data only: near-perfect numbers measure how cleanly the generator separates classes, NOT real-world skill.\n",
+  "model_versions": {
+    "old": {
+      "H1": "h1-hgb",
+      "I1_current": "i1-current",
+      "I1_5m": "i1-5m",
+      "I1_10m": "i1-10m"
+    },
+    "new": {
+      "H1": "h1-v2-hgb",
+      "I1_current": "i1-v2-current",
+      "I1_5m": "i1-v2-5m",
+      "I1_10m": "i1-v2-10m"
+    }
+  },
+  "overall": {
+    "v2_test": {
+      "H1": {
+        "old": {
+          "accuracy": 0.6162222222222222,
+          "macro_f1": 0.4887692055980691,
+          "weighted_f1": 0.5925741316204626,
+          "dangerous_recall": 0.9341654429760157,
+          "false_safe_rate": 0.052618697993147334,
+          "ordinal_mae": 0.793,
+          "log_loss": 2.299715555207315,
+          "rows": 9000,
+          "false_alarm_rate": 0.4235294117647059,
+          "confusion_matrix": {
+            "labels": [
+              "SAFE",
+              "LOW",
+              "MODERATE",
+              "HIGH",
+              "CRITICAL"
+            ],
+            "matrix": [
+              [
+                2093,
+                11,
+                0,
+                904,
+                0
+              ],
+              [
+                2,
+                196,
+                1,
+                401,
+                387
+              ],
+              [
+                0,
+                2,
+                133,
+                505,
+                279
+              ],
+              [
+                3,
+                12,
+                51,
+                2498,
+                5
+              ],
+              [
+                0,
+                200,
+                3,
+                688,
+                626
+              ]
+            ],
+            "rows": "true class",
+            "columns": "predicted class"
+          },
+          "per_class": null
+        },
+        "new": {
+          "accuracy": 0.9974444444444445,
+          "macro_f1": 0.9969984721619347,
+          "weighted_f1": 0.9974438537054167,
+          "dangerous_recall": 0.9975526186979932,
+          "false_safe_rate": 0.0017131669114047968,
+          "ordinal_mae": 0.004666666666666667,
+          "log_loss": 0.01635854269311674,
+          "rows": 9000,
+          "false_alarm_rate": 0.0005006257822277847,
+          "confusion_matrix": {
+            "labels": [
+              "SAFE",
+              "LOW",
+              "MODERATE",
+              "HIGH",
+              "CRITICAL"
+            ],
+            "matrix": [
+              [
+                3007,
+                0,
+                0,
+                1,
+                0
+              ],
+              [
+                2,
+                984,
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                2,
+                913,
+                4,
+                0
+              ],
+              [
+                3,
+                2,
+                1,
+                2563,
+                0
+              ],
+              [
+                2,
+                0,
+                2,
+                3,
+                1510
+              ]
+            ],
+            "rows": "true class",
+            "columns": "predicted class"
+          },
+          "per_class": null
+        }
+      },
+      "I1_current": {
+        "old": {
+          "accuracy": 0.7375555555555555,
+          "macro_f1": 0.658666266776606,
+          "weighted_f1": 0.7386792858660226,
+          "dangerous_recall": 0.7347038668624571,
+          "false_safe_rate": 0.26382770435633873,
+          "ordinal_mae": 0.504,
+          "log_loss": 1.9867521285112089,
+          "rows": 9000,
+          "false_alarm_rate": 0.0986232790988736,
+          "confusion_matrix": {
+            "labels": [
+              "SAFE",
+              "LOW",
+              "MODERATE",
+              "HIGH",
+              "CRITICAL"
+            ],
+            "matrix": [
+              [
+                3001,
+                2,
+                0,
+                5,
+                0
+              ],
+              [
+                2,
+                595,
+                1,
+                389,
+                0
+              ],
+              [
+                0,
+                2,
+                365,
+                360,
+                192
+              ],
+              [
+                5,
+                579,
+                2,
+                1980,
+                3
+              ],
+              [
+                2,
+                492,
+                4,
+                322,
+                697
+              ]
+            ],
+            "rows": "true class",
+            "columns": "predicted class"
+          },
+          "per_class": null
+        },
+        "new": {
+          "accuracy": 0.9973333333333333,
+          "macro_f1": 0.9968224377067493,
+          "weighted_f1": 0.9973327362655121,
+          "dangerous_recall": 0.9975526186979932,
+          "false_safe_rate": 0.0017131669114047968,
+          "ordinal_mae": 0.005,
+          "log_loss": 0.01722412812470774,
+          "rows": 9000,
+          "false_alarm_rate": 0.0010012515644555694,
+          "confusion_matrix": {
+            "labels": [
+              "SAFE",
+              "LOW",
+              "MODERATE",
+              "HIGH",
+              "CRITICAL"
+            ],
+            "matrix": [
+              [
+                3007,
+                0,
+                0,
+                1,
+                0
+              ],
+              [
+                2,
+                982,
+                0,
+                3,
+                0
+              ],
+              [
+                0,
+                2,
+                913,
+                4,
+                0
+              ],
+              [
+                3,
+                2,
+                1,
+                2563,
+                0
+              ],
+              [
+                2,
+                0,
+                2,
+                2,
+                1511
+              ]
+            ],
+            "rows": "true class",
+            "columns": "predicted class"
+          },
+          "per_class": null
+        }
+      },
+      "I1_5m": {
+        "old": {
+          "accuracy": 0.43683333333333335,
+          "macro_f1": 0.408021154199872,
+          "weighted_f1": 0.4641307768216405,
+          "dangerous_recall": 0.6720937805275154,
+          "false_safe_rate": 0.2907847606642787,
+          "ordinal_mae": 0.9216666666666666,
+          "log_loss": 3.2891842922199435,
+          "rows": 6000,
+          "false_alarm_rate": 0.15649183147033535,
+          "escalation_recall": 0.029197080291970802,
+          "confusion_matrix": {
+            "labels": [
+              "SAFE",
+              "LOW",
+              "MODERATE",
+              "HIGH",
+              "CRITICAL"
+            ],
+            "matrix": [
+              [
+                598,
+                1024,
+                0,
+                101,
+                0
+              ],
+              [
+                102,
+                221,
+                17,
+                252,
+                11
+              ],
+              [
+                0,
+                79,
+                154,
+                200,
+                170
+              ],
+              [
+                213,
+                390,
+                6,
+                1219,
+                46
+              ],
+              [
+                1,
+                289,
+                108,
+                370,
+                429
+              ]
+            ],
+            "rows": "true class",
+            "columns": "predicted class"
+          },
+          "per_class": null
+        },
+        "new": {
+          "accuracy": 0.8011666666666667,
+          "macro_f1": 0.7935706079495066,
+          "weighted_f1": 0.8006991415573874,
+          "dangerous_recall": 0.7795506349723217,
+          "false_safe_rate": 0.1846304135460762,
+          "ordinal_mae": 0.4648333333333333,
+          "log_loss": 0.6327724297316494,
+          "rows": 6000,
+          "false_alarm_rate": 0.06921754084264832,
+          "escalation_recall": 0.06569343065693431,
+          "confusion_matrix": {
+            "labels": [
+              "SAFE",
+              "LOW",
+              "MODERATE",
+              "HIGH",
+              "CRITICAL"
+            ],
+            "matrix": [
+              [
+                1585,
+                0,
+                0,
+                121,
+                17
+              ],
+              [
+                81,
+                469,
+                30,
+                23,
+                0
+              ],
+              [
+                0,
+                64,
+                467,
+                11,
+                61
+              ],
+              [
+                380,
+                101,
+                10,
+                1372,
+                11
+              ],
+              [
+                86,
+                0,
+                100,
+                97,
+                914
+              ]
+            ],
+            "rows": "true class",
+            "columns": "predicted class"
+          },
+          "per_class": null
+        }
+      },
+      "I1_10m": {
+        "old": {
+          "accuracy": 0.349,
+          "macro_f1": 0.2894750914782865,
+          "weighted_f1": 0.3441831470300652,
+          "dangerous_recall": 0.743125,
+          "false_safe_rate": 0.20875,
+          "ordinal_mae": 1.3383333333333334,
+          "log_loss": 4.029704662750713,
+          "rows": 3000,
+          "false_alarm_rate": 0.519090909090909,
+          "escalation_recall": 0.42043795620437957,
+          "confusion_matrix": {
+            "labels": [
+              "SAFE",
+              "LOW",
+              "MODERATE",
+              "HIGH",
+              "CRITICAL"
+            ],
+            "matrix": [
+              [
+                181,
+                193,
+                0,
+                97,
+                329
+              ],
+              [
+                97,
+                9,
+                49,
+                59,
+                86
+              ],
+              [
+                0,
+                15,
+                64,
+                157,
+                64
+              ],
+              [
+                186,
+                142,
+                17,
+                493,
+                162
+              ],
+              [
+                0,
+                6,
+                60,
+                234,
+                300
+              ]
+            ],
+            "rows": "true class",
+            "columns": "predicted class"
+          },
+          "per_class": null
+        },
+        "new": {
+          "accuracy": 0.6366666666666667,
+          "macro_f1": 0.6175205523998197,
+          "weighted_f1": 0.6321878208550972,
+          "dangerous_recall": 0.6225,
+          "false_safe_rate": 0.308125,
+          "ordinal_mae": 0.843,
+          "log_loss": 1.5045232208348642,
+          "rows": 3000,
+          "false_alarm_rate": 0.17181818181818181,
+          "escalation_recall": 0.16934306569343066,
+          "confusion_matrix": {
+            "labels": [
+              "SAFE",
+              "LOW",
+              "MODERATE",
+              "HIGH",
+              "CRITICAL"
+            ],
+            "matrix": [
+              [
+                683,
+                2,
+                0,
+                83,
+                32
+              ],
+              [
+                47,
+                163,
+                16,
+                74,
+                0
+              ],
+              [
+                0,
+                50,
+                165,
+                39,
+                46
+              ],
+              [
+                351,
+                82,
+                18,
+                526,
+                23
+              ],
+              [
+                60,
+                0,
+                93,
+                74,
+                373
+              ]
+            ],
+            "rows": "true class",
+            "columns": "predicted class"
+          },
+          "per_class": null
+        }
+      }
+    },
+    "legacy_i1_test": {
+      "I1_current": {
+        "old": {
+          "accuracy": 0.9822222222222222,
+          "macro_f1": 0.7867383357919113,
+          "weighted_f1": 0.9889117745525734,
+          "dangerous_recall": 0.9711062190423776,
+          "false_safe_rate": 0.0049532195927352776,
+          "ordinal_mae": 0.03380952380952381,
+          "log_loss": 0.14443113633617966,
+          "rows": 6300,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "accuracy": 0.6488888888888888,
+          "macro_f1": 0.4872243517395904,
+          "weighted_f1": 0.7213145444294564,
+          "dangerous_recall": 0.7900385250412768,
+          "false_safe_rate": 0.00275178866263071,
+          "ordinal_mae": 0.6473015873015873,
+          "log_loss": 2.623808245924937,
+          "rows": 6300,
+          "false_alarm_rate": 0.20630157539384847
+        }
+      },
+      "I1_5m": {
+        "old": {
+          "accuracy": 0.7521428571428571,
+          "macro_f1": 0.5815100484161781,
+          "weighted_f1": 0.7586184918885648,
+          "dangerous_recall": 0.7991953182150695,
+          "false_safe_rate": 0.18324798829553768,
+          "ordinal_mae": 0.44023809523809526,
+          "log_loss": 2.2285895255974104,
+          "rows": 4200,
+          "false_alarm_rate": 0.002728512960436562,
+          "escalation_recall": 0.125
+        },
+        "new": {
+          "accuracy": 0.6283333333333333,
+          "macro_f1": 0.48936231678775444,
+          "weighted_f1": 0.6515311667469252,
+          "dangerous_recall": 0.790416971470373,
+          "false_safe_rate": 0.12801755669348938,
+          "ordinal_mae": 0.6038095238095238,
+          "log_loss": 1.6978532225309848,
+          "rows": 4200,
+          "false_alarm_rate": 0.048431105047748974,
+          "escalation_recall": 0.4166666666666667
+        }
+      },
+      "I1_10m": {
+        "old": {
+          "accuracy": 0.5642857142857143,
+          "macro_f1": 0.4545098489597579,
+          "weighted_f1": 0.5913384274593645,
+          "dangerous_recall": 0.6426666666666667,
+          "false_safe_rate": 0.28733333333333333,
+          "ordinal_mae": 0.71,
+          "log_loss": 3.217929082045548,
+          "rows": 2100,
+          "false_alarm_rate": 0.0,
+          "escalation_recall": 0.10666666666666667
+        },
+        "new": {
+          "accuracy": 0.5971428571428572,
+          "macro_f1": 0.3978929037698528,
+          "weighted_f1": 0.5820080948377672,
+          "dangerous_recall": 0.788,
+          "false_safe_rate": 0.21066666666666667,
+          "ordinal_mae": 0.7261904761904762,
+          "log_loss": 2.2383891027476417,
+          "rows": 2100,
+          "false_alarm_rate": 0.15833333333333333,
+          "escalation_recall": 0.4716666666666667
+        }
+      }
+    },
+    "legacy_h1_test": {
+      "H1": {
+        "old": {
+          "accuracy": 0.9520833333333333,
+          "macro_f1": 0.7711005963643288,
+          "weighted_f1": 0.9572967461724549,
+          "dangerous_recall": 0.9296148738379814,
+          "false_safe_rate": 0.05046480743691899,
+          "ordinal_mae": 0.0763888888888889,
+          "log_loss": 0.4610893152510249,
+          "rows": 1440,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "accuracy": 0.9479166666666666,
+          "macro_f1": 0.7626595363353869,
+          "weighted_f1": 0.948367591729727,
+          "dangerous_recall": 0.9389110225763613,
+          "false_safe_rate": 0.06108897742363878,
+          "ordinal_mae": 0.08819444444444445,
+          "log_loss": 0.39549821193063806,
+          "rows": 1440,
+          "false_alarm_rate": 0.004366812227074236
+        }
+      }
+    }
+  },
+  "per_scenario_v2_test": {
+    "H1": {
+      "BOTTLENECK": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.98,
+          "dangerous_rows": 300,
+          "dangerous_recall": 0.98,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.9966666666666667,
+          "dangerous_rows": 300,
+          "dangerous_recall": 0.9966666666666667,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "CONFLICTING_FLOW": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.9966666666666667,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "CRITICAL_ESCALATION": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.8966666666666666,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "DROPOUT_DENSE_HIGH": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.9666666666666667,
+          "dangerous_rows": 300,
+          "dangerous_recall": 0.9666666666666667,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "DROPOUT_MOVING_SAFE": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.99,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "EMPTY_ZONE": {
+        "old": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "GRADUAL_BUILDUP": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.15666666666666668,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.8433333333333334
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "MOVING_DENSE_CRITICAL": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.0,
+          "dangerous_rows": 300,
+          "dangerous_recall": 0.33666666666666667,
+          "false_safe_rate": 0.6533333333333333,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "MOVING_DENSE_HIGH": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.9566666666666667,
+          "dangerous_rows": 300,
+          "dangerous_recall": 0.9566666666666667,
+          "false_safe_rate": 0.0033333333333333335,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "NORMAL_STABLE": {
+        "old": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "RAPID_SURGE": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.15666666666666668,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.9966666666666667,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "SINGLE_STATIONARY_PERSON": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.0033333333333333335,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.9966666666666667
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "SLOW_WALK_SAFE": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.9966666666666667,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0033333333333333335
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "SPARSE_MOVING": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.5466666666666666,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.4533333333333333
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "STATIONARY_DENSE_CRITICAL": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.0,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "STATIONARY_DENSE_HIGH": {
+        "old": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "STATIONARY_ELEVATED_DENSITY": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.9966666666666667,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "STATIONARY_LOW_OCCUPANCY": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.0033333333333333335,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.9966666666666667
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "STATIONARY_MODERATE_DENSITY": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.9966666666666667
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "TRANSITION:CONFLICTING_FLOW->CRITICAL_ESCALATION": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.8933333333333333,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.99,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "TRANSITION:EMPTY_ZONE->MOVING_DENSE_HIGH": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.96,
+          "dangerous_rows": 181,
+          "dangerous_recall": 0.9337016574585635,
+          "false_safe_rate": 0.016574585635359115,
+          "safe_or_low_rows": 119,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 181,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 119,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "TRANSITION:GRADUAL_BUILDUP->BOTTLENECK": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.7766666666666666,
+          "dangerous_rows": 186,
+          "dangerous_recall": 0.989247311827957,
+          "false_safe_rate": 0.010752688172043012,
+          "safe_or_low_rows": 114,
+          "false_alarm_rate": 0.5350877192982456
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.9933333333333333,
+          "dangerous_rows": 186,
+          "dangerous_recall": 0.989247311827957,
+          "false_safe_rate": 0.010752688172043012,
+          "safe_or_low_rows": 114,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "TRANSITION:GRADUAL_BUILDUP->RAPID_SURGE": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.31333333333333335,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 84,
+          "false_alarm_rate": 0.40476190476190477
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.9866666666666667,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 84,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "TRANSITION:NORMAL_STABLE->CONFLICTING_FLOW": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.9966666666666667,
+          "dangerous_rows": 120,
+          "dangerous_recall": 0.9916666666666667,
+          "false_safe_rate": 0.008333333333333333,
+          "safe_or_low_rows": 180,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.9966666666666667,
+          "dangerous_rows": 120,
+          "dangerous_recall": 0.9916666666666667,
+          "false_safe_rate": 0.008333333333333333,
+          "safe_or_low_rows": 180,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "TRANSITION:NORMAL_STABLE->GRADUAL_BUILDUP": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.49666666666666665,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.47
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.99,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0033333333333333335
+        }
+      },
+      "TRANSITION:NORMAL_STABLE->STATIONARY_DENSE_HIGH": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.9933333333333333,
+          "dangerous_rows": 196,
+          "dangerous_recall": 0.9897959183673469,
+          "false_safe_rate": 0.01020408163265306,
+          "safe_or_low_rows": 104,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.9966666666666667,
+          "dangerous_rows": 196,
+          "dangerous_recall": 0.9948979591836735,
+          "false_safe_rate": 0.00510204081632653,
+          "safe_or_low_rows": 104,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "TRANSITION:RAPID_SURGE->CRITICAL_ESCALATION": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.7533333333333333,
+          "dangerous_rows": 197,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.9933333333333333,
+          "dangerous_rows": 197,
+          "dangerous_recall": 0.9898477157360406,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "TRANSITION:SPARSE_MOVING->MOVING_DENSE_HIGH": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.7033333333333334,
+          "dangerous_rows": 163,
+          "dangerous_recall": 0.8773006134969326,
+          "false_safe_rate": 0.03680981595092025,
+          "safe_or_low_rows": 137,
+          "false_alarm_rate": 0.5036496350364964
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.9966666666666667,
+          "dangerous_rows": 163,
+          "dangerous_recall": 0.9938650306748467,
+          "false_safe_rate": 0.006134969325153374,
+          "safe_or_low_rows": 137,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "TRANSITION:STATIONARY_DENSE_HIGH->EMPTY_ZONE": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.9466666666666667,
+          "dangerous_rows": 128,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 172,
+          "false_alarm_rate": 0.09302325581395349
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.9966666666666667,
+          "dangerous_rows": 128,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 172,
+          "false_alarm_rate": 0.005813953488372093
+        }
+      },
+      "TRANSITION:STATIONARY_LOW_OCCUPANCY->STATIONARY_DENSE_CRITICAL": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.0033333333333333335,
+          "dangerous_rows": 215,
+          "dangerous_recall": 0.9813953488372092,
+          "false_safe_rate": 0.018604651162790697,
+          "safe_or_low_rows": 85,
+          "false_alarm_rate": 0.9882352941176471
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.9933333333333333,
+          "dangerous_rows": 215,
+          "dangerous_recall": 0.9906976744186047,
+          "false_safe_rate": 0.009302325581395349,
+          "safe_or_low_rows": 85,
+          "false_alarm_rate": 0.0
+        }
+      }
+    },
+    "I1_current": {
+      "BOTTLENECK": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.9966666666666667,
+          "dangerous_rows": 300,
+          "dangerous_recall": 0.9966666666666667,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.9966666666666667,
+          "dangerous_rows": 300,
+          "dangerous_recall": 0.9966666666666667,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "CONFLICTING_FLOW": {
+        "old": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "CRITICAL_ESCALATION": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.9933333333333333,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "DROPOUT_DENSE_HIGH": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.9933333333333333,
+          "dangerous_rows": 300,
+          "dangerous_recall": 0.9966666666666667,
+          "false_safe_rate": 0.0033333333333333335,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "DROPOUT_MOVING_SAFE": {
+        "old": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "EMPTY_ZONE": {
+        "old": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "GRADUAL_BUILDUP": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.7666666666666667,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.23333333333333334
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "MOVING_DENSE_CRITICAL": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.0,
+          "dangerous_rows": 300,
+          "dangerous_recall": 0.9866666666666667,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "MOVING_DENSE_HIGH": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.9666666666666667,
+          "dangerous_rows": 300,
+          "dangerous_recall": 0.9666666666666667,
+          "false_safe_rate": 0.03,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "NORMAL_STABLE": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.9966666666666667,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "RAPID_SURGE": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.44333333333333336,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.9966666666666667,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "SINGLE_STATIONARY_PERSON": {
+        "old": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "SLOW_WALK_SAFE": {
+        "old": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "SPARSE_MOVING": {
+        "old": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "STATIONARY_DENSE_CRITICAL": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.0033333333333333335,
+          "dangerous_rows": 300,
+          "dangerous_recall": 0.0033333333333333335,
+          "false_safe_rate": 0.9966666666666667,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "STATIONARY_DENSE_HIGH": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.11333333333333333,
+          "dangerous_rows": 300,
+          "dangerous_recall": 0.11666666666666667,
+          "false_safe_rate": 0.8833333333333333,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "STATIONARY_ELEVATED_DENSITY": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.9966666666666667,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "STATIONARY_LOW_OCCUPANCY": {
+        "old": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "STATIONARY_MODERATE_DENSITY": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 1.0
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "TRANSITION:CONFLICTING_FLOW->CRITICAL_ESCALATION": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.99,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.9933333333333333,
+          "dangerous_rows": 300,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "TRANSITION:EMPTY_ZONE->MOVING_DENSE_HIGH": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.9533333333333334,
+          "dangerous_rows": 181,
+          "dangerous_recall": 0.9226519337016574,
+          "false_safe_rate": 0.07734806629834254,
+          "safe_or_low_rows": 119,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 1.0,
+          "dangerous_rows": 181,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 119,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "TRANSITION:GRADUAL_BUILDUP->BOTTLENECK": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.98,
+          "dangerous_rows": 186,
+          "dangerous_recall": 0.989247311827957,
+          "false_safe_rate": 0.010752688172043012,
+          "safe_or_low_rows": 114,
+          "false_alarm_rate": 0.02631578947368421
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.9866666666666667,
+          "dangerous_rows": 186,
+          "dangerous_recall": 0.989247311827957,
+          "false_safe_rate": 0.010752688172043012,
+          "safe_or_low_rows": 114,
+          "false_alarm_rate": 0.017543859649122806
+        }
+      },
+      "TRANSITION:GRADUAL_BUILDUP->RAPID_SURGE": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.71,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 84,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.9866666666666667,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 84,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "TRANSITION:NORMAL_STABLE->CONFLICTING_FLOW": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.99,
+          "dangerous_rows": 120,
+          "dangerous_recall": 0.975,
+          "false_safe_rate": 0.025,
+          "safe_or_low_rows": 180,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.9966666666666667,
+          "dangerous_rows": 120,
+          "dangerous_recall": 0.9916666666666667,
+          "false_safe_rate": 0.008333333333333333,
+          "safe_or_low_rows": 180,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "TRANSITION:NORMAL_STABLE->GRADUAL_BUILDUP": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.94,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.05333333333333334
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.99,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 300,
+          "false_alarm_rate": 0.0033333333333333335
+        }
+      },
+      "TRANSITION:NORMAL_STABLE->STATIONARY_DENSE_HIGH": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.4866666666666667,
+          "dangerous_rows": 196,
+          "dangerous_recall": 0.21428571428571427,
+          "false_safe_rate": 0.7857142857142857,
+          "safe_or_low_rows": 104,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.9966666666666667,
+          "dangerous_rows": 196,
+          "dangerous_recall": 0.9948979591836735,
+          "false_safe_rate": 0.00510204081632653,
+          "safe_or_low_rows": 104,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "TRANSITION:RAPID_SURGE->CRITICAL_ESCALATION": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.9966666666666667,
+          "dangerous_rows": 197,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.9933333333333333,
+          "dangerous_rows": 197,
+          "dangerous_recall": 0.9898477157360406,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "TRANSITION:SPARSE_MOVING->MOVING_DENSE_HIGH": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.9366666666666666,
+          "dangerous_rows": 163,
+          "dangerous_recall": 0.8834355828220859,
+          "false_safe_rate": 0.1165644171779141,
+          "safe_or_low_rows": 137,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.9966666666666667,
+          "dangerous_rows": 163,
+          "dangerous_recall": 0.9938650306748467,
+          "false_safe_rate": 0.006134969325153374,
+          "safe_or_low_rows": 137,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "TRANSITION:STATIONARY_DENSE_HIGH->EMPTY_ZONE": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.5866666666666667,
+          "dangerous_rows": 128,
+          "dangerous_recall": 0.0859375,
+          "false_safe_rate": 0.9140625,
+          "safe_or_low_rows": 172,
+          "false_alarm_rate": 0.029069767441860465
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.9966666666666667,
+          "dangerous_rows": 128,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 172,
+          "false_alarm_rate": 0.005813953488372093
+        }
+      },
+      "TRANSITION:STATIONARY_LOW_OCCUPANCY->STATIONARY_DENSE_CRITICAL": {
+        "old": {
+          "rows": 300,
+          "accuracy": 0.2833333333333333,
+          "dangerous_rows": 215,
+          "dangerous_recall": 0.09302325581395349,
+          "false_safe_rate": 0.9069767441860465,
+          "safe_or_low_rows": 85,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 300,
+          "accuracy": 0.9933333333333333,
+          "dangerous_rows": 215,
+          "dangerous_recall": 0.9906976744186047,
+          "false_safe_rate": 0.009302325581395349,
+          "safe_or_low_rows": 85,
+          "false_alarm_rate": 0.0
+        }
+      }
+    },
+    "I1_5m": {
+      "BOTTLENECK": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.99,
+          "dangerous_rows": 200,
+          "dangerous_recall": 0.99,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 1.0,
+          "dangerous_rows": 200,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "CONFLICTING_FLOW": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.775,
+          "dangerous_rows": 200,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 0.945,
+          "dangerous_rows": 200,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "CRITICAL_ESCALATION": {
+        "old": {
+          "rows": 200,
+          "accuracy": 1.0,
+          "dangerous_rows": 200,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 1.0,
+          "dangerous_rows": 200,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "DROPOUT_DENSE_HIGH": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.91,
+          "dangerous_rows": 200,
+          "dangerous_recall": 0.91,
+          "false_safe_rate": 0.09,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 1.0,
+          "dangerous_rows": 200,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "DROPOUT_MOVING_SAFE": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.915,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 200,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 0.995,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 200,
+          "false_alarm_rate": 0.005
+        }
+      },
+      "EMPTY_ZONE": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.005,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 200,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 200,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "GRADUAL_BUILDUP": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.585,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 200,
+          "false_alarm_rate": 0.335
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 0.87,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 200,
+          "false_alarm_rate": 0.025
+        }
+      },
+      "MOVING_DENSE_CRITICAL": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.005,
+          "dangerous_rows": 200,
+          "dangerous_recall": 0.005,
+          "false_safe_rate": 0.855,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 1.0,
+          "dangerous_rows": 200,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "MOVING_DENSE_HIGH": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.92,
+          "dangerous_rows": 200,
+          "dangerous_recall": 0.92,
+          "false_safe_rate": 0.07,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 1.0,
+          "dangerous_rows": 200,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "NORMAL_STABLE": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.975,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 200,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 0.84,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 200,
+          "false_alarm_rate": 0.16
+        }
+      },
+      "RAPID_SURGE": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.405,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 0.84,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "SINGLE_STATIONARY_PERSON": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.005,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 200,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 200,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "SLOW_WALK_SAFE": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.205,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 200,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 200,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "SPARSE_MOVING": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.305,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 200,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 0.915,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 200,
+          "false_alarm_rate": 0.085
+        }
+      },
+      "STATIONARY_DENSE_CRITICAL": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.005,
+          "dangerous_rows": 200,
+          "dangerous_recall": 0.915,
+          "false_safe_rate": 0.085,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 1.0,
+          "dangerous_rows": 200,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "STATIONARY_DENSE_HIGH": {
+        "old": {
+          "rows": 200,
+          "accuracy": 1.0,
+          "dangerous_rows": 200,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 0.95,
+          "dangerous_rows": 200,
+          "dangerous_recall": 0.95,
+          "false_safe_rate": 0.05,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "STATIONARY_ELEVATED_DENSITY": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 0.995,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "STATIONARY_LOW_OCCUPANCY": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.005,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 200,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 0.915,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 200,
+          "false_alarm_rate": 0.085
+        }
+      },
+      "STATIONARY_MODERATE_DENSITY": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.025,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 200,
+          "false_alarm_rate": 0.975
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 200,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "TRANSITION:CONFLICTING_FLOW->CRITICAL_ESCALATION": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.55,
+          "dangerous_rows": 200,
+          "dangerous_recall": 0.995,
+          "false_safe_rate": 0.005,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 0.52,
+          "dangerous_rows": 200,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "TRANSITION:EMPTY_ZONE->MOVING_DENSE_HIGH": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.295,
+          "dangerous_rows": 181,
+          "dangerous_recall": 0.32044198895027626,
+          "false_safe_rate": 0.6795580110497238,
+          "safe_or_low_rows": 19,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 0.5,
+          "dangerous_rows": 181,
+          "dangerous_recall": 0.44751381215469616,
+          "false_safe_rate": 0.5524861878453039,
+          "safe_or_low_rows": 19,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "TRANSITION:GRADUAL_BUILDUP->BOTTLENECK": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.48,
+          "dangerous_rows": 186,
+          "dangerous_recall": 0.44623655913978494,
+          "false_safe_rate": 0.543010752688172,
+          "safe_or_low_rows": 14,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 0.485,
+          "dangerous_rows": 186,
+          "dangerous_recall": 0.46236559139784944,
+          "false_safe_rate": 0.4838709677419355,
+          "safe_or_low_rows": 14,
+          "false_alarm_rate": 0.14285714285714285
+        }
+      },
+      "TRANSITION:GRADUAL_BUILDUP->RAPID_SURGE": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.35,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 0.485,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "TRANSITION:NORMAL_STABLE->CONFLICTING_FLOW": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.475,
+          "dangerous_rows": 120,
+          "dangerous_recall": 0.13333333333333333,
+          "false_safe_rate": 0.8666666666666667,
+          "safe_or_low_rows": 80,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 0.495,
+          "dangerous_rows": 120,
+          "dangerous_recall": 0.15833333333333333,
+          "false_safe_rate": 0.8416666666666667,
+          "safe_or_low_rows": 80,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "TRANSITION:NORMAL_STABLE->GRADUAL_BUILDUP": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.485,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 200,
+          "false_alarm_rate": 0.005
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 0.475,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 200,
+          "false_alarm_rate": 0.08
+        }
+      },
+      "TRANSITION:NORMAL_STABLE->STATIONARY_DENSE_HIGH": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.4,
+          "dangerous_rows": 196,
+          "dangerous_recall": 0.3877551020408163,
+          "false_safe_rate": 0.6122448979591837,
+          "safe_or_low_rows": 4,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 0.6,
+          "dangerous_rows": 196,
+          "dangerous_recall": 0.5918367346938775,
+          "false_safe_rate": 0.40816326530612246,
+          "safe_or_low_rows": 4,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "TRANSITION:RAPID_SURGE->CRITICAL_ESCALATION": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.6,
+          "dangerous_rows": 197,
+          "dangerous_recall": 0.5939086294416244,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 0.5,
+          "dangerous_rows": 197,
+          "dangerous_recall": 0.49238578680203043,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "TRANSITION:SPARSE_MOVING->MOVING_DENSE_HIGH": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.25,
+          "dangerous_rows": 163,
+          "dangerous_recall": 0.25153374233128833,
+          "false_safe_rate": 0.7484662576687117,
+          "safe_or_low_rows": 37,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 0.525,
+          "dangerous_rows": 163,
+          "dangerous_recall": 0.4171779141104294,
+          "false_safe_rate": 0.5828220858895705,
+          "safe_or_low_rows": 37,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "TRANSITION:STATIONARY_DENSE_HIGH->EMPTY_ZONE": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.185,
+          "dangerous_rows": 28,
+          "dangerous_recall": 0.9642857142857143,
+          "false_safe_rate": 0.03571428571428571,
+          "safe_or_low_rows": 172,
+          "false_alarm_rate": 0.5872093023255814
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 0.62,
+          "dangerous_rows": 28,
+          "dangerous_recall": 0.8214285714285714,
+          "false_safe_rate": 0.17857142857142858,
+          "safe_or_low_rows": 172,
+          "false_alarm_rate": 0.4127906976744186
+        }
+      },
+      "TRANSITION:STATIONARY_LOW_OCCUPANCY->STATIONARY_DENSE_CRITICAL": {
+        "old": {
+          "rows": 200,
+          "accuracy": 0.0,
+          "dangerous_rows": 200,
+          "dangerous_recall": 0.495,
+          "false_safe_rate": 0.505,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 200,
+          "accuracy": 0.565,
+          "dangerous_rows": 200,
+          "dangerous_recall": 0.57,
+          "false_safe_rate": 0.43,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      }
+    },
+    "I1_10m": {
+      "BOTTLENECK": {
+        "old": {
+          "rows": 100,
+          "accuracy": 1.0,
+          "dangerous_rows": 100,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 1.0,
+          "dangerous_rows": 100,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "CONFLICTING_FLOW": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.45,
+          "dangerous_rows": 100,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 0.73,
+          "dangerous_rows": 100,
+          "dangerous_recall": 0.96,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "CRITICAL_ESCALATION": {
+        "old": {
+          "rows": 100,
+          "accuracy": 1.0,
+          "dangerous_rows": 100,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 1.0,
+          "dangerous_rows": 100,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "DROPOUT_DENSE_HIGH": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.98,
+          "dangerous_rows": 100,
+          "dangerous_recall": 0.99,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 1.0,
+          "dangerous_rows": 100,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "DROPOUT_MOVING_SAFE": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.9,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 100,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 0.91,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 100,
+          "false_alarm_rate": 0.08
+        }
+      },
+      "EMPTY_ZONE": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 100,
+          "false_alarm_rate": 1.0
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 100,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "GRADUAL_BUILDUP": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.05,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 100,
+          "false_alarm_rate": 0.46
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 0.45,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 100,
+          "false_alarm_rate": 0.39
+        }
+      },
+      "MOVING_DENSE_CRITICAL": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.01,
+          "dangerous_rows": 100,
+          "dangerous_recall": 0.97,
+          "false_safe_rate": 0.03,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 1.0,
+          "dangerous_rows": 100,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "MOVING_DENSE_HIGH": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.93,
+          "dangerous_rows": 100,
+          "dangerous_recall": 0.93,
+          "false_safe_rate": 0.01,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 1.0,
+          "dangerous_rows": 100,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "NORMAL_STABLE": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.44,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 100,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 0.79,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 100,
+          "false_alarm_rate": 0.2
+        }
+      },
+      "RAPID_SURGE": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.47,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 0.61,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "SINGLE_STATIONARY_PERSON": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 100,
+          "false_alarm_rate": 1.0
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 100,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "SLOW_WALK_SAFE": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.41,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 100,
+          "false_alarm_rate": 0.26
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 100,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "SPARSE_MOVING": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.06,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 100,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 0.86,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 100,
+          "false_alarm_rate": 0.14
+        }
+      },
+      "STATIONARY_DENSE_CRITICAL": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.31,
+          "dangerous_rows": 100,
+          "dangerous_recall": 0.97,
+          "false_safe_rate": 0.03,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 1.0,
+          "dangerous_rows": 100,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "STATIONARY_DENSE_HIGH": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.94,
+          "dangerous_rows": 100,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 0.71,
+          "dangerous_rows": 100,
+          "dangerous_recall": 0.71,
+          "false_safe_rate": 0.29,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "STATIONARY_ELEVATED_DENSITY": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 0.99,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "STATIONARY_LOW_OCCUPANCY": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 100,
+          "false_alarm_rate": 1.0
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 0.68,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 100,
+          "false_alarm_rate": 0.32
+        }
+      },
+      "STATIONARY_MODERATE_DENSITY": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.01,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 100,
+          "false_alarm_rate": 0.99
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 1.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 100,
+          "false_alarm_rate": 0.0
+        }
+      },
+      "TRANSITION:CONFLICTING_FLOW->CRITICAL_ESCALATION": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.28,
+          "dangerous_rows": 100,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 0.25,
+          "dangerous_rows": 100,
+          "dangerous_recall": 0.99,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "TRANSITION:EMPTY_ZONE->MOVING_DENSE_HIGH": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.0,
+          "dangerous_rows": 100,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 0.0,
+          "dangerous_rows": 100,
+          "dangerous_recall": 0.0,
+          "false_safe_rate": 1.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "TRANSITION:GRADUAL_BUILDUP->BOTTLENECK": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.63,
+          "dangerous_rows": 100,
+          "dangerous_recall": 0.63,
+          "false_safe_rate": 0.27,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 0.11,
+          "dangerous_rows": 100,
+          "dangerous_recall": 0.11,
+          "false_safe_rate": 0.75,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "TRANSITION:GRADUAL_BUILDUP->RAPID_SURGE": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.17,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 0.05,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "TRANSITION:NORMAL_STABLE->CONFLICTING_FLOW": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.0,
+          "dangerous_rows": 100,
+          "dangerous_recall": 0.0,
+          "false_safe_rate": 1.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 0.0,
+          "dangerous_rows": 100,
+          "dangerous_recall": 0.0,
+          "false_safe_rate": 1.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "TRANSITION:NORMAL_STABLE->GRADUAL_BUILDUP": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.03,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 100,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 0.18,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 100,
+          "false_alarm_rate": 0.35
+        }
+      },
+      "TRANSITION:NORMAL_STABLE->STATIONARY_DENSE_HIGH": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.0,
+          "dangerous_rows": 100,
+          "dangerous_recall": 0.0,
+          "false_safe_rate": 1.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 0.35,
+          "dangerous_rows": 100,
+          "dangerous_recall": 0.35,
+          "false_safe_rate": 0.65,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "TRANSITION:RAPID_SURGE->CRITICAL_ESCALATION": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.4,
+          "dangerous_rows": 100,
+          "dangerous_recall": 0.4,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 0.08,
+          "dangerous_rows": 100,
+          "dangerous_recall": 0.08,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "TRANSITION:SPARSE_MOVING->MOVING_DENSE_HIGH": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.0,
+          "dangerous_rows": 100,
+          "dangerous_recall": 0.0,
+          "false_safe_rate": 1.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 0.36,
+          "dangerous_rows": 100,
+          "dangerous_recall": 0.36,
+          "false_safe_rate": 0.64,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      },
+      "TRANSITION:STATIONARY_DENSE_HIGH->EMPTY_ZONE": {
+        "old": {
+          "rows": 100,
+          "accuracy": 0.0,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 100,
+          "false_alarm_rate": 1.0
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 0.59,
+          "dangerous_rows": 0,
+          "dangerous_recall": null,
+          "false_safe_rate": null,
+          "safe_or_low_rows": 100,
+          "false_alarm_rate": 0.41
+        }
+      },
+      "TRANSITION:STATIONARY_LOW_OCCUPANCY->STATIONARY_DENSE_CRITICAL": {
+        "old": {
+          "rows": 100,
+          "accuracy": 1.0,
+          "dangerous_rows": 100,
+          "dangerous_recall": 1.0,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        },
+        "new": {
+          "rows": 100,
+          "accuracy": 0.4,
+          "dangerous_rows": 100,
+          "dangerous_recall": 0.4,
+          "false_safe_rate": 0.6,
+          "safe_or_low_rows": 0,
+          "false_alarm_rate": null
+        }
+      }
+    }
+  },
+  "complete_vs_incomplete_v2_test": {
+    "H1": {
+      "old": {
+        "complete_inputs": {
+          "rows": 5858,
+          "accuracy": 0.7205530897917378,
+          "dangerous_rows": 2887,
+          "dangerous_recall": 0.9085555940422584,
+          "false_safe_rate": 0.07308624870107377,
+          "safe_or_low_rows": 2354,
+          "false_alarm_rate": 0.29524214103653357
+        },
+        "incomplete_inputs": {
+          "rows": 3142,
+          "accuracy": 0.42170591979630806,
+          "dangerous_rows": 1199,
+          "dangerous_recall": 0.9958298582151793,
+          "false_safe_rate": 0.003336113427856547,
+          "safe_or_low_rows": 1641,
+          "false_alarm_rate": 0.6075563680682511
+        }
+      },
+      "new": {
+        "complete_inputs": {
+          "rows": 5858,
+          "accuracy": 0.99692727893479,
+          "dangerous_rows": 2887,
+          "dangerous_recall": 0.9975753377208174,
+          "false_safe_rate": 0.0017319016279875303,
+          "safe_or_low_rows": 2354,
+          "false_alarm_rate": 0.0004248088360237893
+        },
+        "incomplete_inputs": {
+          "rows": 3142,
+          "accuracy": 0.998408656906429,
+          "dangerous_rows": 1199,
+          "dangerous_recall": 0.9974979149291076,
+          "false_safe_rate": 0.0016680567139282735,
+          "safe_or_low_rows": 1641,
+          "false_alarm_rate": 0.0006093845216331506
+        }
+      }
+    },
+    "I1_current": {
+      "old": {
+        "complete_inputs": {
+          "rows": 5858,
+          "accuracy": 0.8801638784568112,
+          "dangerous_rows": 2887,
+          "dangerous_recall": 0.9812954624177347,
+          "false_safe_rate": 0.017319016279875303,
+          "safe_or_low_rows": 2354,
+          "false_alarm_rate": 0.037807986406117246
+        },
+        "incomplete_inputs": {
+          "rows": 3142,
+          "accuracy": 0.4716740929344367,
+          "dangerous_rows": 1199,
+          "dangerous_recall": 0.1409507923269391,
+          "false_safe_rate": 0.8573811509591326,
+          "safe_or_low_rows": 1641,
+          "false_alarm_rate": 0.1858622790981109
+        }
+      },
+      "new": {
+        "complete_inputs": {
+          "rows": 5858,
+          "accuracy": 0.996756572208945,
+          "dangerous_rows": 2887,
+          "dangerous_recall": 0.9975753377208174,
+          "false_safe_rate": 0.0017319016279875303,
+          "safe_or_low_rows": 2354,
+          "false_alarm_rate": 0.001274426508071368
+        },
+        "incomplete_inputs": {
+          "rows": 3142,
+          "accuracy": 0.998408656906429,
+          "dangerous_rows": 1199,
+          "dangerous_recall": 0.9974979149291076,
+          "false_safe_rate": 0.0016680567139282735,
+          "safe_or_low_rows": 1641,
+          "false_alarm_rate": 0.0006093845216331506
+        }
+      }
+    }
+  },
+  "input_flags_v2_test": {
+    "rows": 9000,
+    "incomplete_rows": 3142,
+    "unsupported_rows_under_new_models(<30 training rows)": 53,
+    "distinct_undefined_patterns_in_test": 19,
+    "distinct_patterns_in_training": 24
+  },
+  "legacy_i1_test_by_time": {
+    "I1_current": {
+      "t<=120s": {
+        "old": {
+          "rows": 847,
+          "accuracy": 0.9917355371900827,
+          "dangerous_rows": 363,
+          "dangerous_recall": 0.9834710743801653,
+          "false_safe_rate": 0.01652892561983471,
+          "safe_or_low_rows": 484,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 847,
+          "accuracy": 0.9940968122786304,
+          "dangerous_rows": 363,
+          "dangerous_recall": 0.9972451790633609,
+          "false_safe_rate": 0.0,
+          "safe_or_low_rows": 484,
+          "false_alarm_rate": 0.002066115702479339
+        }
+      },
+      "t>120s": {
+        "old": {
+          "rows": 5453,
+          "accuracy": 0.9807445442875481,
+          "dangerous_rows": 3271,
+          "dangerous_recall": 0.969734026291654,
+          "false_safe_rate": 0.0036686028737389176,
+          "safe_or_low_rows": 2182,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 5453,
+          "accuracy": 0.5952686594535118,
+          "dangerous_rows": 3271,
+          "dangerous_recall": 0.7670437175175787,
+          "false_safe_rate": 0.003057169061449098,
+          "safe_or_low_rows": 2182,
+          "false_alarm_rate": 0.2516040329972502
+        }
+      }
+    },
+    "I1_5m": {
+      "t<=120s": {
+        "old": {
+          "rows": 847,
+          "accuracy": 0.9492325855962219,
+          "dangerous_rows": 396,
+          "dangerous_recall": 0.9116161616161617,
+          "false_safe_rate": 0.08333333333333333,
+          "safe_or_low_rows": 451,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 847,
+          "accuracy": 0.9020070838252656,
+          "dangerous_rows": 396,
+          "dangerous_recall": 0.9141414141414141,
+          "false_safe_rate": 0.08333333333333333,
+          "safe_or_low_rows": 451,
+          "false_alarm_rate": 0.09090909090909091
+        }
+      },
+      "t>120s": {
+        "old": {
+          "rows": 3353,
+          "accuracy": 0.7023560990158068,
+          "dangerous_rows": 2338,
+          "dangerous_recall": 0.7801539777587682,
+          "false_safe_rate": 0.20017108639863132,
+          "safe_or_low_rows": 1015,
+          "false_alarm_rate": 0.003940886699507389
+        },
+        "new": {
+          "rows": 3353,
+          "accuracy": 0.5592007157769162,
+          "dangerous_rows": 2338,
+          "dangerous_recall": 0.7694610778443114,
+          "false_safe_rate": 0.13558597091531224,
+          "safe_or_low_rows": 1015,
+          "false_alarm_rate": 0.029556650246305417
+        }
+      }
+    },
+    "I1_10m": {
+      "t<=120s": {
+        "old": {
+          "rows": 847,
+          "accuracy": 0.5737898465171193,
+          "dangerous_rows": 605,
+          "dangerous_recall": 0.656198347107438,
+          "false_safe_rate": 0.315702479338843,
+          "safe_or_low_rows": 242,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 847,
+          "accuracy": 0.6505312868949232,
+          "dangerous_rows": 605,
+          "dangerous_recall": 0.7206611570247934,
+          "false_safe_rate": 0.27603305785123966,
+          "safe_or_low_rows": 242,
+          "false_alarm_rate": 0.21074380165289255
+        }
+      },
+      "t>120s": {
+        "old": {
+          "rows": 1253,
+          "accuracy": 0.5578611332801277,
+          "dangerous_rows": 895,
+          "dangerous_recall": 0.6335195530726258,
+          "false_safe_rate": 0.2681564245810056,
+          "safe_or_low_rows": 358,
+          "false_alarm_rate": 0.0
+        },
+        "new": {
+          "rows": 1253,
+          "accuracy": 0.5610534716679968,
+          "dangerous_rows": 895,
+          "dangerous_recall": 0.8335195530726257,
+          "false_safe_rate": 0.1664804469273743,
+          "safe_or_low_rows": 358,
+          "false_alarm_rate": 0.12290502793296089
+        }
+      }
+    }
+  },
+  "legacy_label_density_inconsistency": {
+    "legacy_test_rows_t>120s": 5453,
+    "SAFE_or_LOW_labelled_rows": 2182,
+    "of_which_density>=1.5_people_per_m2 (G1's own HIGH regime)": 667,
+    "max_people_count_among_SAFE_or_LOW": 325
+  },
+  "probes": {
+    "within_expected_class_set_of_13": {
+      "old_H1": 10,
+      "old_I1_current": 10,
+      "old_I1_5m": 12,
+      "old_I1_10m": 8,
+      "new_H1": 13,
+      "new_I1_current": 13,
+      "new_I1_5m": 13,
+      "new_I1_10m": 13
+    },
+    "predictions": {
+      "empty_zone": {
+        "old_H1": "SAFE",
+        "old_I1_current": "SAFE",
+        "old_I1_5m": "LOW",
+        "old_I1_10m": "CRITICAL",
+        "new_H1": "SAFE",
+        "new_I1_current": "SAFE",
+        "new_I1_5m": "SAFE",
+        "new_I1_10m": "SAFE",
+        "nan_features": 27,
+        "expected": "LOW/SAFE"
+      },
+      "one_stationary_person": {
+        "old_H1": "HIGH",
+        "old_I1_current": "SAFE",
+        "old_I1_5m": "LOW",
+        "old_I1_10m": "CRITICAL",
+        "new_H1": "SAFE",
+        "new_I1_current": "SAFE",
+        "new_I1_5m": "SAFE",
+        "new_I1_10m": "SAFE",
+        "nan_features": 13,
+        "expected": "LOW/SAFE"
+      },
+      "stationary_low_occupancy": {
+        "old_H1": "HIGH",
+        "old_I1_current": "SAFE",
+        "old_I1_5m": "LOW",
+        "old_I1_10m": "CRITICAL",
+        "new_H1": "SAFE",
+        "new_I1_current": "SAFE",
+        "new_I1_5m": "SAFE",
+        "new_I1_10m": "SAFE",
+        "nan_features": 13,
+        "expected": "LOW/SAFE"
+      },
+      "stationary_moderate": {
+        "old_H1": "HIGH",
+        "old_I1_current": "HIGH",
+        "old_I1_5m": "HIGH",
+        "old_I1_10m": "HIGH",
+        "new_H1": "LOW",
+        "new_I1_current": "LOW",
+        "new_I1_5m": "LOW",
+        "new_I1_10m": "LOW",
+        "nan_features": 13,
+        "expected": "LOW/MODERATE/SAFE"
+      },
+      "dense_stationary_high": {
+        "old_H1": "HIGH",
+        "old_I1_current": "LOW",
+        "old_I1_5m": "HIGH",
+        "old_I1_10m": "CRITICAL",
+        "new_H1": "HIGH",
+        "new_I1_current": "HIGH",
+        "new_I1_5m": "HIGH",
+        "new_I1_10m": "HIGH",
+        "nan_features": 13,
+        "expected": "CRITICAL/HIGH"
+      },
+      "dense_stationary_critical": {
+        "old_H1": "HIGH",
+        "old_I1_current": "LOW",
+        "old_I1_5m": "HIGH",
+        "old_I1_10m": "CRITICAL",
+        "new_H1": "CRITICAL",
+        "new_I1_current": "CRITICAL",
+        "new_I1_5m": "CRITICAL",
+        "new_I1_10m": "CRITICAL",
+        "nan_features": 13,
+        "expected": "CRITICAL/HIGH"
+      },
+      "normal_moving": {
+        "old_H1": "SAFE",
+        "old_I1_current": "SAFE",
+        "old_I1_5m": "SAFE",
+        "old_I1_10m": "LOW",
+        "new_H1": "SAFE",
+        "new_I1_current": "SAFE",
+        "new_I1_5m": "SAFE",
+        "new_I1_10m": "LOW",
+        "nan_features": 0,
+        "expected": "LOW/SAFE"
+      },
+      "sparse_moving": {
+        "old_H1": "SAFE",
+        "old_I1_current": "SAFE",
+        "old_I1_5m": "SAFE",
+        "old_I1_10m": "SAFE",
+        "new_H1": "SAFE",
+        "new_I1_current": "SAFE",
+        "new_I1_5m": "SAFE",
+        "new_I1_10m": "SAFE",
+        "nan_features": 0,
+        "expected": "LOW/SAFE"
+      },
+      "moving_dense_high": {
+        "old_H1": "HIGH",
+        "old_I1_current": "HIGH",
+        "old_I1_5m": "HIGH",
+        "old_I1_10m": "HIGH",
+        "new_H1": "HIGH",
+        "new_I1_current": "HIGH",
+        "new_I1_5m": "HIGH",
+        "new_I1_10m": "HIGH",
+        "nan_features": 0,
+        "expected": "CRITICAL/HIGH"
+      },
+      "low_speed_dangerous_congestion": {
+        "old_H1": "HIGH",
+        "old_I1_current": "HIGH",
+        "old_I1_5m": "HIGH",
+        "old_I1_10m": "HIGH",
+        "new_H1": "HIGH",
+        "new_I1_current": "HIGH",
+        "new_I1_5m": "HIGH",
+        "new_I1_10m": "HIGH",
+        "nan_features": 0,
+        "expected": "CRITICAL/HIGH"
+      },
+      "low_speed_safe": {
+        "old_H1": "SAFE",
+        "old_I1_current": "SAFE",
+        "old_I1_5m": "LOW",
+        "old_I1_10m": "LOW",
+        "new_H1": "SAFE",
+        "new_I1_current": "SAFE",
+        "new_I1_5m": "SAFE",
+        "new_I1_10m": "SAFE",
+        "nan_features": 0,
+        "expected": "LOW/SAFE"
+      },
+      "diag_one_person_direction_defined": {
+        "old_H1": "SAFE",
+        "old_I1_current": "SAFE",
+        "old_I1_5m": "LOW",
+        "old_I1_10m": "SAFE",
+        "new_H1": "SAFE",
+        "new_I1_current": "SAFE",
+        "new_I1_5m": "SAFE",
+        "new_I1_10m": "SAFE",
+        "nan_features": 0,
+        "expected": "LOW/SAFE"
+      },
+      "diag_dense_high_direction_defined": {
+        "old_H1": "HIGH",
+        "old_I1_current": "HIGH",
+        "old_I1_5m": "HIGH",
+        "old_I1_10m": "LOW",
+        "new_H1": "HIGH",
+        "new_I1_current": "HIGH",
+        "new_I1_5m": "HIGH",
+        "new_I1_10m": "HIGH",
+        "nan_features": 0,
+        "expected": "CRITICAL/HIGH"
+      }
+    }
+  },
+  "latency_and_size": {
+    "bundle_load_s": {
+      "old": 0.2,
+      "new": 0.467
+    },
+    "single_sample_ms": {
+      "old": {
+        "H1": 4.991,
+        "I1_current": 5.4281,
+        "I1_5m": 5.3114,
+        "I1_10m": 5.2359
+      },
+      "new": {
+        "H1": 4.2662,
+        "I1_current": 4.0994,
+        "I1_5m": 5.2128,
+        "I1_10m": 5.9548
+      }
+    },
+    "size_kb": {
+      "old": {
+        "H1": 1461.6,
+        "I1_current": 1507.5,
+        "I1_5m": 1884.9,
+        "I1_10m": 1876.4
+      },
+      "new": {
+        "H1": 978.4,
+        "I1_current": 1896.0,
+        "I1_5m": 1005.3,
+        "I1_10m": 1878.6
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+*.pt
+*.onnx
+.coverage
+htmlcov/
+
+# Model weights auto-download via Ultralytics on first use — never commit
+# them. See README "Model weights" section.
+yolov8*.pt
+
+# Sample video + demo output ARE tracked (small, reproducible, needed for
+# B1 demo/benchmark) — do not ignore sample_data/ wholesale.
+!sample_data/
+!sample_data/test_video.mp4
+!sample_data/output/
+!sample_data/output/*.mp4
+!sample_data/output/*.json

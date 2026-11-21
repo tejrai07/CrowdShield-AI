@@ -1,0 +1,33 @@
+{
+  "detector_only": {
+    "model": "yolov8n.pt",
+    "device": "cpu",
+    "image_size": 640,
+    "source_fps": 12.0,
+    "target_fps": 15.0,
+    "effective_target_fps": 12.0,
+    "processed_frames": 100,
+    "cold_start_s": 2.18,
+    "avg_inference_latency_ms": 88.78,
+    "avg_end_to_end_latency_ms": 88.78,
+    "measured_fps": 11.26,
+    "avg_people_detected": 0.57
+  },
+  "detector_plus_tracker": {
+    "model": "yolov8n.pt",
+    "device": "cpu",
+    "image_size": 640,
+    "source_fps": 12.0,
+    "target_fps": 15.0,
+    "effective_target_fps": 12.0,
+    "processed_frames": 100,
+    "cold_start_s": 0.032,
+    "avg_inference_latency_ms": 0.0,
+    "avg_end_to_end_latency_ms": 92.08,
+    "measured_fps": 10.86,
+    "avg_people_detected": 0.56
+  },
+  "tracking_overhead_ms": 3.3,
+  "max_simultaneous_tracks": 1,
+  "total_unique_track_ids": 1
+}

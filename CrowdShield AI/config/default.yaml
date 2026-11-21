@@ -1,0 +1,39 @@
+video:
+  source: "sample_data/test_video.mp4"
+  # target_fps is the PROCESSING rate, not the source video's native frame
+  # rate. See config/schema.py VideoConfig for details.
+  # Set to 12 to match the bundled test_video.mp4's native source FPS (12).
+  # FrameSource still clamps effective_target_fps = min(target_fps,
+  # source_fps) at runtime for any OTHER video with a lower source FPS —
+  # this default value change does not remove that safety clamp.
+  target_fps: 12
+
+detection:
+  model: "yolov8n.pt"
+  confidence: 0.4
+  device: "auto"
+  image_size: 640
+
+tracking:
+  tracker: "bytetrack"
+  max_age: 30
+
+analytics:
+  update_interval_seconds: 1.0
+  trajectory_history_seconds: 15
+  feature_history_seconds: 60
+
+risk:
+  model_path: null
+  thresholds:
+    low: 25
+    moderate: 50
+    high: 75
+    critical: 90
+
+venue:
+  name: "default_venue"
+  zones: []
+
+random_seed: 42
+config_version: "0.1.0"

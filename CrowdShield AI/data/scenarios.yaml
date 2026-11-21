@@ -1,0 +1,127 @@
+# CrowdShield G1 — Synthetic Scenario Definitions
+#
+# EVERY numeric value here is an explicit ENGINEERING ASSUMPTION used to
+# generate plausible, controlled, reproducible synthetic training data.
+# NONE of these values are validated real-world crowd-safety thresholds.
+# See README "Phase G1" for the full disclaimer.
+
+duration_s: 120.0
+sample_interval_s: 1.0
+zone_id: "synthetic_zone"
+realizations_per_scenario: 8
+realizations_per_transition: 6
+base_seed: 42
+density_growth_threshold: 0.05
+
+train_frac: 0.7
+val_frac: 0.15
+test_frac: 0.15
+
+scenarios:
+  - name: "NORMAL_STABLE"
+    label: "SAFE"
+    area_m2: 50.0
+    base_density: 0.5
+    density_trend: 0.0
+    base_speed_px_s: 60.0
+    speed_trend_px_s2: 0.0
+    base_direction_deg: 90.0
+    base_direction_variance: 0.05
+    direction_variance_trend: 0.0
+    inflow_rate: 0.3
+    outflow_rate: 0.3
+    noise_level: 0.1
+
+  - name: "GRADUAL_BUILDUP"
+    label: "LOW"
+    area_m2: 50.0
+    base_density: 0.8
+    density_trend: 0.01
+    base_speed_px_s: 55.0
+    speed_trend_px_s2: -0.15
+    base_direction_deg: 90.0
+    base_direction_variance: 0.08
+    direction_variance_trend: 0.001
+    inflow_rate: 0.5
+    outflow_rate: 0.3
+    noise_level: 0.12
+
+  - name: "RAPID_SURGE"
+    label: "MODERATE"
+    area_m2: 50.0
+    base_density: 1.0
+    density_trend: 0.08
+    base_speed_px_s: 50.0
+    speed_trend_px_s2: -0.4
+    base_direction_deg: 90.0
+    base_direction_variance: 0.1
+    direction_variance_trend: 0.002
+    inflow_rate: 1.2
+    outflow_rate: 0.4
+    noise_level: 0.15
+
+  - name: "BOTTLENECK"
+    label: "HIGH"
+    area_m2: 50.0
+    base_density: 1.5
+    density_trend: 0.03
+    base_speed_px_s: 40.0
+    speed_trend_px_s2: -0.25
+    base_direction_deg: 90.0
+    base_direction_variance: 0.1
+    direction_variance_trend: 0.0
+    inflow_rate: 1.0
+    outflow_rate: 0.2
+    noise_level: 0.12
+
+  - name: "CONFLICTING_FLOW"
+    label: "HIGH"
+    area_m2: 50.0
+    base_density: 1.0
+    density_trend: 0.005
+    base_speed_px_s: 45.0
+    speed_trend_px_s2: -0.1
+    base_direction_deg: 90.0
+    base_direction_variance: 0.5
+    direction_variance_trend: 0.003
+    inflow_rate: 0.5
+    outflow_rate: 0.45
+    noise_level: 0.2
+
+  - name: "CRITICAL_ESCALATION"
+    label: "CRITICAL"
+    area_m2: 50.0
+    base_density: 2.0
+    density_trend: 0.06
+    base_speed_px_s: 35.0
+    speed_trend_px_s2: -0.5
+    base_direction_deg: 90.0
+    base_direction_variance: 0.3
+    direction_variance_trend: 0.004
+    inflow_rate: 1.5
+    outflow_rate: 0.3
+    noise_level: 0.15
+
+# Scripted transitions: a single sequence starts in `from_scenario`'s
+# regime and blends into `to_scenario`'s regime over
+# `transition_duration_s`, starting at a randomized point per realization
+# (see data/synthetic_generator.py for the exact blending rule).
+transitions:
+  - from_scenario: "NORMAL_STABLE"
+    to_scenario: "GRADUAL_BUILDUP"
+    transition_duration_s: 15.0
+  - from_scenario: "GRADUAL_BUILDUP"
+    to_scenario: "RAPID_SURGE"
+    transition_duration_s: 12.0
+  - from_scenario: "RAPID_SURGE"
+    to_scenario: "CRITICAL_ESCALATION"
+    transition_duration_s: 10.0
+  - from_scenario: "GRADUAL_BUILDUP"
+    to_scenario: "BOTTLENECK"
+    transition_duration_s: 15.0
+  - from_scenario: "NORMAL_STABLE"
+    to_scenario: "CONFLICTING_FLOW"
+    transition_duration_s: 15.0
+  - from_scenario: "CONFLICTING_FLOW"
+    to_scenario: "CRITICAL_ESCALATION"
+    transition_duration_s: 10.0

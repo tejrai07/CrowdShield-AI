@@ -1,0 +1,61 @@
+# K1 DEMO VENUE — a richer, purpose-built zone graph for demonstrating
+# and testing the diversion decision engine (Phase K1). An ENGINEERING
+# DEMO CONFIGURATION, not a real venue's measured capacity, adjacency,
+# or routing cost — see README "Phase K1" for the full disclaimer.
+#
+#   entrance -- main_hall -- exit_north
+#                  |
+#              exit_south -- overflow_zone
+#
+# entrance and exit_north are NOT directly connected (must route through
+# main_hall). Polygons are placeholders satisfying ZoneConfig's schema.
+name: "k1_demo_venue"
+zones:
+  - id: "entrance"
+    name: "Entrance"
+    polygon: [[0, 0], [100, 0], [100, 100], [0, 100]]
+    area_m2: 40.0
+    enabled: true
+    capacity: 80
+    preferred_utilization_threshold: 0.85
+    neighbors: ["main_hall"]
+  - id: "main_hall"
+    name: "Main Hall"
+    polygon: [[110, 0], [210, 0], [210, 100], [110, 100]]
+    area_m2: 100.0
+    enabled: true
+    capacity: 200
+    preferred_utilization_threshold: 0.85
+    neighbors: ["entrance", "exit_north", "exit_south"]
+    neighbor_costs: {"exit_north": 1.0, "exit_south": 1.5}
+  - id: "exit_north"
+    name: "Exit North"
+    polygon: [[220, 0], [320, 0], [320, 100], [220, 100]]
+    area_m2: 50.0
+    enabled: true
+    capacity: 100
+    preferred_utilization_threshold: 0.85
+    neighbors: ["main_hall"]
+  - id: "exit_south"
+    name: "Exit South"
+    polygon: [[110, 110], [210, 110], [210, 210], [110, 210]]
+    area_m2: 50.0
+    enabled: true
+    capacity: 100
+    preferred_utilization_threshold: 0.85
+    neighbors: ["main_hall", "overflow_zone"]
+  - id: "overflow_zone"
+    name: "Overflow Zone"
+    polygon: [[220, 110], [320, 110], [320, 210], [220, 210]]
+    area_m2: 150.0
+    enabled: true
+    capacity: 300
+    preferred_utilization_threshold: 0.9
+    neighbors: ["exit_south"]
+  - id: "maintenance_closet"
+    name: "Maintenance Closet (disabled)"
+    polygon: [[330, 0], [360, 0], [360, 30], [330, 30]]
+    area_m2: 5.0
+    enabled: false
+    capacity: 5.0
+    neighbors: []

@@ -1,0 +1,36 @@
+{
+  "detector_plus_tracker": {
+    "model": "yolov8n.pt",
+    "device": "cpu",
+    "image_size": 640,
+    "source_fps": 12.0,
+    "target_fps": 12.0,
+    "effective_target_fps": 12.0,
+    "processed_frames": 100,
+    "cold_start_s": 0.031,
+    "avg_inference_latency_ms": 0.0,
+    "avg_end_to_end_latency_ms": 72.68,
+    "measured_fps": 13.76,
+    "avg_people_detected": 0.56
+  },
+  "detector_plus_tracker_plus_zones": {
+    "model": "yolov8n.pt",
+    "device": "cpu",
+    "image_size": 640,
+    "source_fps": 12.0,
+    "target_fps": 12.0,
+    "effective_target_fps": 12.0,
+    "processed_frames": 100,
+    "cold_start_s": 0.027,
+    "avg_inference_latency_ms": 0.0,
+    "avg_end_to_end_latency_ms": 73.75,
+    "measured_fps": 13.56,
+    "avg_people_detected": 0.56
+  },
+  "zone_assignment_overhead_ms": 1.07,
+  "zone_hit_counts": {
+    "main_area": 34,
+    "exit": 22
+  },
+  "unassigned_track_updates": 0
+}

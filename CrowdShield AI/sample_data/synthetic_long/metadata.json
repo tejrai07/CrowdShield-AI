@@ -1,0 +1,54 @@
+{
+  "generator_version": "g1.0.0",
+  "data_source": "synthetic",
+  "generated_at_utc": "2026-08-16T16:05:19.070144+00:00",
+  "base_seed": 42,
+  "duration_s": 900.0,
+  "sample_interval_s": 1.0,
+  "windows_seconds": [
+    5,
+    15,
+    30,
+    60
+  ],
+  "density_growth_threshold": 0.05,
+  "n_sequences": 42,
+  "n_rows": 37800,
+  "n_pure_sequences": 24,
+  "n_transition_sequences": 18,
+  "scenarios": [
+    "NORMAL_STABLE",
+    "GRADUAL_BUILDUP",
+    "RAPID_SURGE",
+    "BOTTLENECK",
+    "CONFLICTING_FLOW",
+    "CRITICAL_ESCALATION"
+  ],
+  "transitions": [
+    "NORMAL_STABLE->GRADUAL_BUILDUP",
+    "GRADUAL_BUILDUP->RAPID_SURGE",
+    "RAPID_SURGE->CRITICAL_ESCALATION",
+    "GRADUAL_BUILDUP->BOTTLENECK",
+    "NORMAL_STABLE->CONFLICTING_FLOW",
+    "CONFLICTING_FLOW->CRITICAL_ESCALATION"
+  ],
+  "label_counts": {
+    "HIGH": 11060,
+    "LOW": 7804,
+    "CRITICAL": 6697,
+    "MODERATE": 6214,
+    "SAFE": 6025
+  },
+  "disclaimer": "This dataset is synthetic engineering data generated to develop and test the CrowdShield risk model. It is NOT real-world crowd-safety ground truth and does not establish clinically or operationally validated thresholds.",
+  "split_seed": 7,
+  "split_fracs": {
+    "train": 0.7,
+    "val": 0.15,
+    "test": 0.15
+  },
+  "split_sequence_counts": {
+    "test": 7,
+    "train": 29,
+    "val": 6
+  }
+}

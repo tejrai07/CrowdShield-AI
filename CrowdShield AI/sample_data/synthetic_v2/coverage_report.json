@@ -1,0 +1,262 @@
+{
+  "rows": {
+    "all": 47400,
+    "train": 29400,
+    "val": 9000,
+    "test": 9000
+  },
+  "sequences": {
+    "all": 158,
+    "train": 98,
+    "val": 30,
+    "test": 30
+  },
+  "states": {
+    "empty zone (people_count == 0)": {
+      "all": 3044,
+      "train": 1801,
+      "val": 653,
+      "test": 590
+    },
+    "very low occupancy (people_count <= 2)": {
+      "all": 4854,
+      "train": 3010,
+      "val": 954,
+      "test": 890
+    },
+    "stationary (people>0 and avg_speed < 1 px/s)": {
+      "all": 16155,
+      "train": 10180,
+      "val": 2918,
+      "test": 3057
+    },
+    "low speed (avg_speed < 30 px/s)": {
+      "all": 24618,
+      "train": 15391,
+      "val": 4570,
+      "test": 4657
+    },
+    "speed metrics undefined (post warm-up)": {
+      "all": 3497,
+      "train": 2111,
+      "val": 737,
+      "test": 649
+    },
+    "direction metrics undefined (post warm-up)": {
+      "all": 15942,
+      "train": 10035,
+      "val": 2995,
+      "test": 2912
+    },
+    "ANY core movement metric undefined (post warm-up)": {
+      "all": 15942,
+      "train": 10035,
+      "val": 2995,
+      "test": 2912
+    },
+    "warm-up rows (t < 60 s)": {
+      "all": 3160,
+      "train": 1960,
+      "val": 600,
+      "test": 600
+    },
+    "any NaN feature (post warm-up)": {
+      "all": 15947,
+      "train": 10038,
+      "val": 2996,
+      "test": 2913
+    },
+    "sudden entry/exit (>=50% and >=10 people change within 5 s)": {
+      "all": 902,
+      "train": 516,
+      "val": 210,
+      "test": 176
+    },
+    "stationary people with direction undefined (valid 0.0 speed)": {
+      "all": 13325,
+      "train": 8484,
+      "val": 2418,
+      "test": 2423
+    },
+    "abrupt label jump SAFE/LOW -> HIGH/CRITICAL in one step": {
+      "all": 24,
+      "train": 12,
+      "val": 6,
+      "test": 6
+    },
+    "dangerous label with speed < 10 px/s": {
+      "all": 9641,
+      "train": 5849,
+      "val": 1802,
+      "test": 1990
+    },
+    "dense & slow (density >= 1.5 and speed < 30)": {
+      "all": 14354,
+      "train": 8671,
+      "val": 2790,
+      "test": 2893
+    },
+    "dangerous label": {
+      "all": 21046,
+      "train": 12986,
+      "val": 3974,
+      "test": 4086
+    }
+  },
+  "post_warmup_rows": 44240,
+  "min_density": 0.0,
+  "min_avg_speed": 0.0,
+  "min_people_count": 0,
+  "rows_by_scenario_and_split": {
+    "BOTTLENECK": {
+      "test": 300,
+      "train": 1200,
+      "val": 300
+    },
+    "CONFLICTING_FLOW": {
+      "test": 300,
+      "train": 1200,
+      "val": 300
+    },
+    "CRITICAL_ESCALATION": {
+      "test": 300,
+      "train": 1200,
+      "val": 300
+    },
+    "DROPOUT_DENSE_HIGH": {
+      "test": 300,
+      "train": 1200,
+      "val": 300
+    },
+    "DROPOUT_MOVING_SAFE": {
+      "test": 300,
+      "train": 1200,
+      "val": 300
+    },
+    "EMPTY_ZONE": {
+      "test": 300,
+      "train": 1200,
+      "val": 300
+    },
+    "GRADUAL_BUILDUP": {
+      "test": 300,
+      "train": 1200,
+      "val": 300
+    },
+    "MOVING_DENSE_CRITICAL": {
+      "test": 300,
+      "train": 1200,
+      "val": 300
+    },
+    "MOVING_DENSE_HIGH": {
+      "test": 300,
+      "train": 1200,
+      "val": 300
+    },
+    "NORMAL_STABLE": {
+      "test": 300,
+      "train": 1200,
+      "val": 300
+    },
+    "RAPID_SURGE": {
+      "test": 300,
+      "train": 1200,
+      "val": 300
+    },
+    "SINGLE_STATIONARY_PERSON": {
+      "test": 300,
+      "train": 1200,
+      "val": 300
+    },
+    "SLOW_WALK_SAFE": {
+      "test": 300,
+      "train": 1200,
+      "val": 300
+    },
+    "SPARSE_MOVING": {
+      "test": 300,
+      "train": 1200,
+      "val": 300
+    },
+    "STATIONARY_DENSE_CRITICAL": {
+      "test": 300,
+      "train": 1200,
+      "val": 300
+    },
+    "STATIONARY_DENSE_HIGH": {
+      "test": 300,
+      "train": 1200,
+      "val": 300
+    },
+    "STATIONARY_ELEVATED_DENSITY": {
+      "test": 300,
+      "train": 1200,
+      "val": 300
+    },
+    "STATIONARY_LOW_OCCUPANCY": {
+      "test": 300,
+      "train": 1200,
+      "val": 300
+    },
+    "STATIONARY_MODERATE_DENSITY": {
+      "test": 300,
+      "train": 1200,
+      "val": 300
+    },
+    "TRANSITION:CONFLICTING_FLOW->CRITICAL_ESCALATION": {
+      "test": 300,
+      "train": 600,
+      "val": 300
+    },
+    "TRANSITION:EMPTY_ZONE->MOVING_DENSE_HIGH": {
+      "test": 300,
+      "train": 600,
+      "val": 300
+    },
+    "TRANSITION:GRADUAL_BUILDUP->BOTTLENECK": {
+      "test": 300,
+      "train": 600,
+      "val": 300
+    },
+    "TRANSITION:GRADUAL_BUILDUP->RAPID_SURGE": {
+      "test": 300,
+      "train": 600,
+      "val": 300
+    },
+    "TRANSITION:NORMAL_STABLE->CONFLICTING_FLOW": {
+      "test": 300,
+      "train": 600,
+      "val": 300
+    },
+    "TRANSITION:NORMAL_STABLE->GRADUAL_BUILDUP": {
+      "test": 300,
+      "train": 600,
+      "val": 300
+    },
+    "TRANSITION:NORMAL_STABLE->STATIONARY_DENSE_HIGH": {
+      "test": 300,
+      "train": 600,
+      "val": 300
+    },
+    "TRANSITION:RAPID_SURGE->CRITICAL_ESCALATION": {
+      "test": 300,
+      "train": 600,
+      "val": 300
+    },
+    "TRANSITION:SPARSE_MOVING->MOVING_DENSE_HIGH": {
+      "test": 300,
+      "train": 600,
+      "val": 300
+    },
+    "TRANSITION:STATIONARY_DENSE_HIGH->EMPTY_ZONE": {
+      "test": 300,
+      "train": 600,
+      "val": 300
+    },
+    "TRANSITION:STATIONARY_LOW_OCCUPANCY->STATIONARY_DENSE_CRITICAL": {
+      "test": 300,
+      "train": 600,
+      "val": 300
+    }
+  }
+}

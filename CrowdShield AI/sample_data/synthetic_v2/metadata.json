@@ -1,0 +1,75 @@
+{
+  "dataset_version": "synthetic_v2",
+  "row_stride": 3,
+  "split_strategy": "stratified",
+  "generator_version": "g1.0.0",
+  "data_source": "synthetic",
+  "generated_at_utc": "2026-10-29T07:44:26.618783+00:00",
+  "base_seed": 20260,
+  "duration_s": 900.0,
+  "sample_interval_s": 1.0,
+  "windows_seconds": [
+    5,
+    15,
+    30,
+    60
+  ],
+  "density_growth_threshold": 0.05,
+  "n_sequences": 158,
+  "n_rows": 47400,
+  "n_pure_sequences": 114,
+  "n_transition_sequences": 44,
+  "scenarios": [
+    "NORMAL_STABLE",
+    "GRADUAL_BUILDUP",
+    "RAPID_SURGE",
+    "BOTTLENECK",
+    "CONFLICTING_FLOW",
+    "CRITICAL_ESCALATION",
+    "EMPTY_ZONE",
+    "SINGLE_STATIONARY_PERSON",
+    "STATIONARY_LOW_OCCUPANCY",
+    "STATIONARY_MODERATE_DENSITY",
+    "STATIONARY_ELEVATED_DENSITY",
+    "STATIONARY_DENSE_HIGH",
+    "STATIONARY_DENSE_CRITICAL",
+    "SPARSE_MOVING",
+    "MOVING_DENSE_HIGH",
+    "MOVING_DENSE_CRITICAL",
+    "SLOW_WALK_SAFE",
+    "DROPOUT_MOVING_SAFE",
+    "DROPOUT_DENSE_HIGH"
+  ],
+  "transitions": [
+    "NORMAL_STABLE->GRADUAL_BUILDUP",
+    "GRADUAL_BUILDUP->RAPID_SURGE",
+    "RAPID_SURGE->CRITICAL_ESCALATION",
+    "GRADUAL_BUILDUP->BOTTLENECK",
+    "NORMAL_STABLE->CONFLICTING_FLOW",
+    "CONFLICTING_FLOW->CRITICAL_ESCALATION",
+    "EMPTY_ZONE->MOVING_DENSE_HIGH",
+    "STATIONARY_DENSE_HIGH->EMPTY_ZONE",
+    "STATIONARY_LOW_OCCUPANCY->STATIONARY_DENSE_CRITICAL",
+    "SPARSE_MOVING->MOVING_DENSE_HIGH",
+    "NORMAL_STABLE->STATIONARY_DENSE_HIGH"
+  ],
+  "label_counts": {
+    "SAFE": 16101,
+    "HIGH": 13539,
+    "CRITICAL": 7507,
+    "LOW": 5351,
+    "MODERATE": 4902
+  },
+  "disclaimer": "This dataset is synthetic engineering data generated to develop and test the CrowdShield risk model. It is NOT real-world crowd-safety ground truth and does not establish clinically or operationally validated thresholds.",
+  "split_seed": 11,
+  "split_fracs": {
+    "train": 0.7,
+    "val": 0.15,
+    "test": 0.15
+  },
+  "split_sequence_counts": {
+    "test": 30,
+    "train": 98,
+    "val": 30
+  }
+}

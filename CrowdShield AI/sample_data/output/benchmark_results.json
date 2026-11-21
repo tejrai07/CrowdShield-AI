@@ -1,0 +1,28 @@
+[
+  {
+    "model": "yolov8n.pt",
+    "device": "cpu",
+    "image_size": 640,
+    "source_fps": 12.0,
+    "target_fps": 15.0,
+    "processed_frames": 100,
+    "cold_start_s": 2.505,
+    "avg_inference_latency_ms": 111.71,
+    "avg_end_to_end_latency_ms": 111.72,
+    "effective_fps": 8.95,
+    "avg_people_detected": 0.57
+  },
+  {
+    "model": "yolov8s.pt",
+    "device": "cpu",
+    "image_size": 640,
+    "source_fps": 12.0,
+    "target_fps": 15.0,
+    "processed_frames": 100,
+    "cold_start_s": 0.278,
+    "avg_inference_latency_ms": 270.32,
+    "avg_end_to_end_latency_ms": 270.32,
+    "effective_fps": 3.7,
+    "avg_people_detected": 0.57
+  }
+]

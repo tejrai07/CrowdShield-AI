@@ -1,0 +1,8 @@
+{
+  "processed_frames": 200,
+  "c1_detector_plus_tracker_ms": 75.34,
+  "c1_plus_d1_plus_e1_ms": 75.38,
+  "d1_plus_e1_overhead_ms": 0.044,
+  "c1_plus_d1_plus_e1_plus_f1_ms": 75.98,
+  "f1_overhead_ms": 0.599
+}

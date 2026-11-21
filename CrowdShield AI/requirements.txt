@@ -1,0 +1,54 @@
+# CrowdShield — dependency strategy
+#
+# This file only lists dependencies needed by the CURRENTLY COMPLETED
+# stages. Each future phase adds its own dependencies here at the time
+# that phase is implemented — we do not pre-install libraries a stage
+# doesn't need yet.
+#
+# Completed stages: Phase A1 (config, logging, reproducibility)
+#                    Phase B1 (person detection, benchmarking)
+#                    Phase C1 (ByteTrack tracking — no new packages needed,
+#                              ByteTrack ships inside ultralytics)
+#                    Phase D1/E1/F1 (zones, metrics, temporal — stdlib only)
+#                    Phase G1 (synthetic dataset generation — pandas)
+#                    Phase H1 (baseline risk model — scikit-learn)
+#                    Phase I1 (future-risk prediction — no new packages)
+#                    Phase J1 (explainability — no new packages; SHAP was
+#                              evaluated and deliberately rejected due to
+#                              its 206MB numba/llvmlite transitive
+#                              dependency weight — see README "Phase J1")
+
+pydantic>=2.6
+PyYAML>=6.0
+
+# Phase B1 — person detection
+ultralytics>=8.4          # includes numpy, torch, and bundled ByteTrack
+opencv-python-headless>=4.9
+# ByteTrack (bundled in ultralytics) imports `lap` for assignment. Ultralytics only auto-installs it lazily at
+# first use, which silently fails in a clean/offline/disk-constrained environment and breaks tracking
+# (observed: 11 tracker tests failed until it was installed) - so declare it explicitly.
+lap>=0.5.12
+
+# Phase G1 — synthetic dataset generation
+pandas>=2.2                # numpy already present transitively via ultralytics/torch
+
+# Phase H1 — baseline risk model
+#
+# EXACT PIN, not a lower bound like everything else in this file. This is
+# deliberate: scikit-learn does NOT guarantee pickle/joblib compatibility
+# of fitted estimators across versions (see their own docs). We ship a
+# pre-trained model artifact (models/artifacts/risk_model.pkl); a loose
+# ">=" pin here lets a fresh install silently resolve a newer sklearn than
+# the one that trained the artifact, which breaks loading (discovered via
+# a real cross-machine failure — see CHANGELOG "H1 portability fix").
+# If you intentionally upgrade this pin, you MUST also regenerate the
+# model artifact under the new version (scripts/train_risk_model.py).
+scikit-learn==1.8.0
+
+# Phase J1 — explainability: NO new dependency added. SHAP was evaluated
+# (it works correctly with the pinned HistGradientBoostingClassifier) but
+# rejected — `pip install shap` pulls in numba+llvmlite (~206MB of an LLVM
+# JIT toolchain) purely to explain a small tabular model. J1 instead uses
+# a dependency-free occlusion-based local explanation
+# (models/explainability.py), built entirely on RiskModel.predict_proba().
+# See README "Phase J1" for the full investigation and tradeoffs.
