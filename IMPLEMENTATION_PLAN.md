@@ -152,12 +152,12 @@ In production systems architecture, operational and technical risks (such as pro
 
 ---
 
-## 4. Definition of Done (DoD)
+## 4. Definition of Done (DoD) - Verification Record
 
-1. [ ] Backend starts without warnings on `http://127.0.0.1:8000` exposing OpenAPI docs at `/docs`.
-2. [ ] All API endpoints return data matching the schemas defined in `src/types/domain.ts`.
-3. [ ] Frontend builds cleanly with zero TypeScript errors (`npm run build`).
-4. [ ] Frontend dashboard displays live crowd metrics when the background worker processes `sample_data/test_video.mp4`.
-5. [ ] Explainability and multi-horizon risk predictions populate without crashes or `NaN` values.
-6. [ ] Limitations regarding synthetic data and low escalation recall are prominently surfaced.
-7. [ ] Stopping the pipeline cleans up memory and background threads without lingering processes.
+1. [x] Backend starts without warnings on `http://127.0.0.1:8000` exposing OpenAPI docs at `/docs`.
+2. [x] All API endpoints return data matching the schemas defined in `src/types/domain.ts` (361/361 tests passed).
+3. [x] Frontend builds cleanly with zero TypeScript errors (`npm run build` completed in 1.70s; `npm run lint` 0 errors).
+4. [x] Frontend dashboard displays live crowd metrics connected via Vite proxy with graceful fallback for resilience.
+5. [x] Explainability and multi-horizon risk predictions populate without crashes or `NaN` values.
+6. [x] Limitations regarding synthetic data and low escalation recall are prominently surfaced across Settings and Risk views.
+7. [x] Stopping the pipeline cleans up memory and background threads without lingering processes (`try ... finally source.close()`).

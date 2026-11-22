@@ -1,9 +1,5 @@
 // Dashboard API abstraction.
-//
-// This module is the ONLY place dashboard data is fetched from.
-// Components and hooks must never call the mock layer or an HTTP
-// client directly — they call these functions. When the real backend
-// is ready, swap the implementation below; call sites do not change.
+// Connects to FastAPI backend via /api proxy, with automatic fallback to mock generators if offline.
 
 import {
   getCrowdDensityTrend,
@@ -14,6 +10,7 @@ import {
   getZoneOccupancyDistribution,
 } from '../mock/dashboardMock';
 import { simulateLatency } from '../mock/generators';
+import { fetchWithFallback } from './client';
 import type {
   DashboardSummary,
   FlowDirectionSlice,
@@ -23,20 +20,33 @@ import type {
 } from '../../types/domain';
 
 export const dashboardApi = {
-  getSummary: (): Promise<DashboardSummary> => simulateLatency(getDashboardSummary(), 350),
+  getSummary: (): Promise<DashboardSummary> =>
+    fetchWithFallback('/api/dashboard/summary', () =>
+      simulateLatency(getDashboardSummary(), 350),
+    ),
 
   getCrowdDensityTrend: (): Promise<TimeSeriesPoint[]> =>
-    simulateLatency(getCrowdDensityTrend(), 450),
+    fetchWithFallback('/api/dashboard/crowd-density-trend', () =>
+      simulateLatency(getCrowdDensityTrend(), 450),
+    ),
 
   getRiskLevelTrend: (): Promise<TimeSeriesPoint[]> =>
-    simulateLatency(getRiskLevelTrend(), 450),
+    fetchWithFallback('/api/dashboard/risk-level-trend', () =>
+      simulateLatency(getRiskLevelTrend(), 450),
+    ),
 
   getZoneOccupancyDistribution: (): Promise<ZoneOccupancySlice[]> =>
-    simulateLatency(getZoneOccupancyDistribution(), 400),
+    fetchWithFallback('/api/dashboard/zone-occupancy-distribution', () =>
+      simulateLatency(getZoneOccupancyDistribution(), 400),
+    ),
 
   getFlowDirectionDistribution: (): Promise<FlowDirectionSlice[]> =>
-    simulateLatency(getFlowDirectionDistribution(), 400),
+    fetchWithFallback('/api/dashboard/flow-direction-distribution', () =>
+      simulateLatency(getFlowDirectionDistribution(), 400),
+    ),
 
   getRecentEvents: (): Promise<OperationalEvent[]> =>
-    simulateLatency(getRecentEvents(), 500),
+    fetchWithFallback('/api/dashboard/recent-events', () =>
+      simulateLatency(getRecentEvents(), 500),
+    ),
 };

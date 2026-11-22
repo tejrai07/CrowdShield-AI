@@ -1,14 +1,19 @@
-// Risk API abstraction — the only place risk-monitoring data is fetched
-// from. Mock-backed today; swap the implementation when the real
-// prediction service is ready. Call sites never change.
+// Risk API abstraction. Connects to FastAPI backend via /api proxy with fallback to mock.
 
 import { getFeatureContributions, getRiskForecast, getRiskTimeline } from '../mock/riskMock';
 import { simulateLatency } from '../mock/generators';
+import { fetchWithFallback } from './client';
 import type { FeatureContribution, RiskForecastPoint, TimeSeriesPoint } from '../../types/domain';
 
 export const riskApi = {
-  getForecast: (): Promise<RiskForecastPoint[]> => simulateLatency(getRiskForecast(), 400),
-  getTimeline: (): Promise<TimeSeriesPoint[]> => simulateLatency(getRiskTimeline(), 450),
+  getForecast: (): Promise<RiskForecastPoint[]> =>
+    fetchWithFallback('/api/risk/forecast', () => simulateLatency(getRiskForecast(), 400)),
+
+  getTimeline: (): Promise<TimeSeriesPoint[]> =>
+    fetchWithFallback('/api/risk/timeline', () => simulateLatency(getRiskTimeline(), 450)),
+
   getFeatureContributions: (): Promise<FeatureContribution[]> =>
-    simulateLatency(getFeatureContributions(), 400),
+    fetchWithFallback('/api/risk/feature-contributions', () =>
+      simulateLatency(getFeatureContributions(), 400),
+    ),
 };

@@ -1,12 +1,14 @@
-// Zone API abstraction. Same contract rule as dashboardApi.ts: this is
-// the only place zone data is fetched from. Swap the implementation
-// when the real backend is ready — call sites never change.
+// Zone API abstraction. Connects to FastAPI backend via /api proxy with fallback to mock.
 
 import { getZoneById, getZones } from '../mock/zonesMock';
 import { simulateLatency } from '../mock/generators';
+import { fetchWithFallback } from './client';
 import type { Zone } from '../../types/domain';
 
 export const zoneApi = {
-  getZones: (): Promise<Zone[]> => simulateLatency(getZones(), 400),
-  getZoneById: (id: string): Promise<Zone | undefined> => simulateLatency(getZoneById(id), 300),
+  getZones: (): Promise<Zone[]> =>
+    fetchWithFallback('/api/zones', () => simulateLatency(getZones(), 400)),
+
+  getZoneById: (id: string): Promise<Zone | undefined> =>
+    fetchWithFallback(`/api/zones/${id}`, () => simulateLatency(getZoneById(id), 300)),
 };

@@ -1,6 +1,4 @@
-// Analytics API abstraction — the only place crowd analytics data is
-// fetched from. Mock-backed today; swap the implementation when the
-// real analytics service is ready. Call sites never change.
+// Analytics API abstraction. Connects to FastAPI backend via /api proxy with fallback to mock.
 
 import {
   getBottleneckPressure,
@@ -12,19 +10,37 @@ import {
   type BottleneckPoint,
 } from '../mock/analyticsMock';
 import { simulateLatency } from '../mock/generators';
+import { fetchWithFallback } from './client';
 import type { TimeRange, TimeSeriesPoint } from '../../types/domain';
 
 export const analyticsApi = {
   getDensityOverTime: (range: TimeRange): Promise<TimeSeriesPoint[]> =>
-    simulateLatency(getDensityOverTime(range), 400),
+    fetchWithFallback(`/api/analytics/density-over-time?range=${range}`, () =>
+      simulateLatency(getDensityOverTime(range), 400),
+    ),
+
   getMovementSpeedDistribution: (range: TimeRange): Promise<TimeSeriesPoint[]> =>
-    simulateLatency(getMovementSpeedDistribution(range), 400),
+    fetchWithFallback(`/api/analytics/movement-speed-distribution?range=${range}`, () =>
+      simulateLatency(getMovementSpeedDistribution(range), 400),
+    ),
+
   getDirectionVariance: (range: TimeRange): Promise<TimeSeriesPoint[]> =>
-    simulateLatency(getDirectionVariance(range), 400),
+    fetchWithFallback(`/api/analytics/direction-variance?range=${range}`, () =>
+      simulateLatency(getDirectionVariance(range), 400),
+    ),
+
   getInflowRate: (range: TimeRange): Promise<TimeSeriesPoint[]> =>
-    simulateLatency(getInflowRate(range), 400),
+    fetchWithFallback(`/api/analytics/inflow-rate?range=${range}`, () =>
+      simulateLatency(getInflowRate(range), 400),
+    ),
+
   getOutflowRate: (range: TimeRange): Promise<TimeSeriesPoint[]> =>
-    simulateLatency(getOutflowRate(range), 400),
+    fetchWithFallback(`/api/analytics/outflow-rate?range=${range}`, () =>
+      simulateLatency(getOutflowRate(range), 400),
+    ),
+
   getBottleneckPressure: (): Promise<BottleneckPoint[]> =>
-    simulateLatency(getBottleneckPressure(), 400),
+    fetchWithFallback('/api/analytics/bottleneck-pressure', () =>
+      simulateLatency(getBottleneckPressure(), 400),
+    ),
 };

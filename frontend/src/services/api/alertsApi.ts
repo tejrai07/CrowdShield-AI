@@ -1,11 +1,11 @@
-// Alerts API abstraction — the only place alert data is fetched from.
-// Mock-backed today; swap the implementation when the real alerting
-// backend is ready. Call sites never change.
+// Alerts API abstraction. Connects to FastAPI backend via /api proxy with fallback to mock.
 
 import { getAlerts } from '../mock/alertsMock';
 import { simulateLatency } from '../mock/generators';
+import { fetchWithFallback } from './client';
 import type { Alert } from '../../types/domain';
 
 export const alertsApi = {
-  getAlerts: (): Promise<Alert[]> => simulateLatency(getAlerts(), 400),
+  getAlerts: (): Promise<Alert[]> =>
+    fetchWithFallback('/api/alerts', () => simulateLatency(getAlerts(), 400)),
 };
